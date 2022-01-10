@@ -70,6 +70,14 @@ if __name__ == '__main__':
             self.cardioid = Cardioid(self)
             self.main_menu_play_button_rect = pygame.Rect((width // 3, height // 5 * 3), (width // 3, height // 6))
             self.draw_main_menu()
+            #####   choose level
+            self.screen_for_choose_level = pygame.Surface((width, height)).convert_alpha()
+            self.screen_for_choose_level.fill((0, 0, 0, 0))
+            rect1 = pygame.Rect(width // 16 * 3, height // 3, width // 8, height // 16 * 3)
+            rect2 = pygame.Rect(width // 16 * 7, height // 3, width // 8, height // 16 * 3)
+            rect3 = pygame.Rect(width // 16 * 11, height // 3, width // 8, height // 16 * 3)
+            self.choose_level_button_rects = [rect1, rect2, rect3]
+            self.draw_choose_level()
             #####   settings
             self.in_game_settings_open_button_rect = pygame.Rect(width // 60, height // 40, width // 12, height // 8)
             self.in_game_settings_screen = pygame.Surface((width, height)).convert_alpha()
@@ -96,6 +104,7 @@ if __name__ == '__main__':
             self.bool_to_go_to_next_wave = False
             #### particles
             self.particles_main_menu = []
+            self.particles_choose_level = [[], [], []]
             ####
             self.towers = []
             self.mouse = Mouse(self)
@@ -124,6 +133,8 @@ if __name__ == '__main__':
         def update(self):
             if self.screen_focus == 'main menu':
                 self.main_menu()
+            elif self.screen_focus == 'choose level':
+                self.choose_level()
             elif self.screen_focus == 'game':
                 self.update_waves()
             elif self.screen_focus == 'in-game settings':
@@ -165,6 +176,56 @@ if __name__ == '__main__':
             text_rect.center = width // 2, int(height / 60 * 41)
             self.screen_for_main_menu.blit(text, text_rect)
             ####
+
+        def choose_level(self):
+            for i, rect in enumerate(self.choose_level_button_rects):
+                if self.mouse.rect.colliderect(rect) or len(self.particles_choose_level[i]) != 0:
+                    if len(self.particles_choose_level[i]) == 0:
+                        w = width
+                        h = height
+                        valuems = (250, ((w // 16 * 3 + w // 4 * i, h // 3), (w // 8, h // 16 * 3)), 2)
+                        self.particles_choose_level[i].append(valuems)
+                    bl = self.particles_choose_level[i][0][0]
+                    pos = self.particles_choose_level[i][0][1]
+                    sh = int(self.particles_choose_level[i][0][2])
+                    pygame.draw.rect(screen_for_particles, (100, 100, 100, bl), pos, sh)
+                    if self.particles_choose_level[i][0][0] - 5 > 0:
+                        pos_after = ((pos[0][0] - 0.4, pos[0][1] - 0.4), (pos[1][0] + 0.8, pos[1][1] + 0.8))
+                        bl = self.particles_choose_level[i][0][0] - 5
+                        wi = self.particles_choose_level[i][0][2] + 0.05
+                        self.particles_choose_level[i][0] = (bl, pos_after, wi)
+                    else:
+                        self.particles_choose_level[i] = []
+                    screen.blit(screen_for_particles, (0, 0))
+                    screen_for_particles.fill((0, 0, 0, 0))
+            screen.blit(self.screen_for_choose_level, (0, 0))
+
+        def draw_choose_level(self):
+            w, h = width, height
+            ### draw buttons
+            for i in range(3):
+                bpos1 = (w // 8 + w // 16 + w // 8 * 2 * i, h // 3), (w // 8, h // 16 * 3)
+                bpos2 = ((w * 3 + w * 4 * i) // 16 + 5, h // 3 + 5), (w // 8 - 10, h // 16 * 3 - 10)
+                pygame.draw.rect(self.screen_for_choose_level, (100, 100, 100), bpos1, 0)
+                pygame.draw.rect(self.screen_for_choose_level, (70, 70, 70), bpos2, 0)
+                text = pygame.font.Font(None, 120).render(str(i + 1), True, (20, 20, 20))
+                text_rect = text.get_rect()
+                text_rect.left = w // 4 + w // 8 * 2 * i - text_rect.width // 2
+                text_rect.top = h // 3 + h * 3 // 32 - text_rect.height // 2
+                self.screen_for_choose_level.blit(text, text_rect)
+                for j in range(3):
+                    screen_for_star = pygame.Surface((40, 40)).convert_alpha()
+                    screen_for_star.fill((0, 0, 0, 0))
+                    pos = (20, 5), (25, 15), (34, 20), (25, 25), (30, 35), (20, 30), (10, 35), (15, 25), (6, 20), (15, 15)
+                    pygame.draw.polygon(screen_for_star, (200, 200, 0), pos, 0)
+                    pos = (bpos1[0][0] + 15 + 40 * j, bpos1[0][1] + bpos2[1][1] - 35)
+                    self.screen_for_choose_level.blit(screen_for_star, pos)
+            ### draw
+            for i in range(5):
+                text = pygame.font.Font(None, 120 - i).render('Choose Level', True, [i * 30 + 50 for _ in range(3)])
+                text_rect = text.get_rect()
+                text_rect.topleft = width // 2 - text_rect.width // 2, height // 5 - text_rect.height // 2
+                self.screen_for_choose_level.blit(text, text_rect)
 
         def update_waves(self):
             self.time = self.time - self.clock.tick() / 1000 * self.speed_of_game
@@ -563,18 +624,13 @@ if __name__ == '__main__':
                             dollar_text_rect.y = height // 2 + height // 80 * 3 - dollar_text_rect.height // 2
                             self.screen_for_upgr_built.blit(dollar_text, dollar_text_rect)
                             ###
+                            for i, x in enumerate([radius_text, attack_text, speed_text]):
+                                rectx = x.get_rect()
+                                rectx.top, rectx.x = 160 + i * 40, width // 6 - rectx.width // 2
+                                self.screen_for_upgr_built.blit(x, rectx)
                             rect1 = level_text.get_rect()
                             rect1.top, rect1.x = 110, width // 6 - rect1.width // 2
                             self.screen_for_upgr_built.blit(level_text, rect1)
-                            rect2 = radius_text.get_rect()
-                            rect2.top, rect2.x = 160, width//6-rect2.width//2
-                            self.screen_for_upgr_built.blit(radius_text, rect2)
-                            rect3 = attack_text.get_rect()
-                            rect3.top, rect3.x = 200, width // 6 - rect3.width // 2
-                            self.screen_for_upgr_built.blit(attack_text, rect3)
-                            rect4 = speed_text.get_rect()
-                            rect4.top, rect4.x = 240, width // 6 - rect4.width // 2
-                            self.screen_for_upgr_built.blit(speed_text, rect4)
                             rect5 = upgrade_cost_text.get_rect()
                             rect5.top, rect5.x = 485, width // 6 - rect5.width // 2
                             self.screen_for_upgr_built.blit(upgrade_cost_text, rect5)
@@ -593,16 +649,18 @@ if __name__ == '__main__':
                     pygame.draw.rect(self.screen_for_upgr_built, (70, 70, 70), ((5, 5), (width // 3-10, 70)), 0)
                     pygame.draw.polygon(self.screen_for_upgr_built, (40, 40, 40), posses, 0)
                 #self.screen_for_upgr_built.blit(text_for_button, rect)
-            if screen_ != None:
+            if screen_ is not None:
                 if not self.mouse.here_tower:
-                    pos_ = (self.mouse.pos[0]*value+5, self.mouse.pos[1]*value+5), (value-10, value-10)
-                    pygame.draw.rect(screen_, (0, 200, 0, 250), pos_, 0)
+                    pos_ = (self.mouse.pos[0]*value + 2, self.mouse.pos[1]*value + 2), (value - 4, value - 4)
+                    pygame.draw.rect(screen_, (0, 200, 0, 250), pos_, 3)
                     screen.blit(screen_, (0, 0))
                     pygame.draw.rect(screen_, (0, 0, 0, 0), pos_, 0)
                 else:
                     pos_ = self.mouse.pos[0]*value + value // 2, self.mouse.pos[1]*value + value // 2
                     radius = self.towers[Tower.towers_pos.index(self.mouse.pos)].attack_radius
+                    pos_2 = (self.mouse.pos[0]*value + 2, self.mouse.pos[1]*value + 2), (value - 4, value - 4)
                     pygame.draw.circle(screen_, (0, 0, 200, 50), pos_, radius)
+                    pygame.draw.rect(screen_, (0, 200, 0, 200), pos_2, 3)
                     screen.blit(screen_, (0, 0))
                     pygame.draw.rect(screen_, (0, 0, 0, 0), ((0, 0), (width, height)), 0)
             if reason != 'enemy killed':
@@ -610,7 +668,7 @@ if __name__ == '__main__':
 
 
     class Map(pygame.sprite.Sprite, Game):
-        def __init__(self):
+        def __init__(self, mapn):
             super().__init__(all_sprites)
             global list_of_possobility_to_go
             self.list_of_values_to_draw = [[0 for _ in range(width//value)] for _ in range(height//value)]
@@ -625,8 +683,29 @@ if __name__ == '__main__':
                             [0, 0, 2, 2, 2, 0, 0, 0, 1, 0, 2, 1, 2, 2, 0, 0],
                             [0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 1, 2, 0, 0, 0],
                             [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
-                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0]]}
-            list_of_possobility_to_go = self.map[1]
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0]],
+                        2: [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 2, 0, 2, 2, 2, 1, 2, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 2, 0, 2, 1, 2, 0, 0, 0, 2, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 2, 1, 2, 2, 1, 1, 1, 4, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 1, 2, 2, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 1, 2, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0]],
+                        3: [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 2, 0, 2, 2, 2, 1, 2, 0, 0, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 2, 0, 2, 1, 2, 0, 0, 0, 2, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 2, 1, 2, 2, 1, 1, 1, 4, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 1, 2, 2, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 1, 2, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 3, 1, 1, 1, 1, 0, 0, 0, 0],
+                            [0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0]]
+                        }
+            list_of_possobility_to_go = self.map[mapn]
             print(self.map[1])
             print(list_of_possobility_to_go)
             for y in range(len(list_of_possobility_to_go)):
@@ -690,12 +769,12 @@ if __name__ == '__main__':
 
 
     class Enemy(pygame.sprite.Sprite):
-        def __init__(self, type, radius, hp, parent):
+        def __init__(self, typo, radius, hp, parent):
             super().__init__(all_sprites)
             self.parent = parent
             self.radius = radius
             self.rand_value = random.randint(-value//5, value//5)
-            x = self.parent.map.portal_pos[0]*value + value//2
+            x = self.parent.map.portal_pos[0]*value + value//2 - self.rand_value - self.radius
             y = self.parent.map.portal_pos[1]*value + value//2 - self.rand_value - self.radius
             self.hp = hp
             self.max_hp = hp
@@ -703,23 +782,23 @@ if __name__ == '__main__':
             self.vx = 1
             self.v = 1
             self.vy = 0
-            self.type = type
-            if type == 'common':
+            self.typo = typo
+            if typo == 'common':
                 pygame.draw.circle(self.image, (50, 50, 255), (radius, radius), radius)
                 pygame.draw.circle(self.image, (50, 50, 205), (radius, radius), radius-5)
                 pygame.draw.circle(self.image, (50, 50, 155), (radius, radius), radius-10)
                 self.earn_coins = 2
-            elif type == 'boss':
+            elif typo == 'boss':
                 pygame.draw.rect(self.image, (200, 10, 10), ((0, 0), (radius*2, radius*2)), 0)
                 pygame.draw.rect(self.image, (150, 10, 10), ((5, 5), (radius * 2 - 10, radius * 2 - 10)), 0)
                 self.earn_coins = 20
-            elif type == 'fast':
+            elif typo == 'fast':
                 pygame.draw.polygon(self.image, (200, 200, 10), ((0, 0), (radius * 2, 0), (radius, radius * 3 // 2)), 0)
                 pygame.draw.polygon(self.image, (150, 150, 10),
                                     ((5, 2), (radius * 2-5, 2), (radius, radius * 3 // 2-5)), 0)
                 self.earn_coins = 4
                 self.v = 2
-            elif type == 'hidden':
+            elif typo == 'hidden':
                 pygame.draw.circle(self.image, (50, 50, 255, 100), (radius, radius), radius)
                 pygame.draw.circle(self.image, (50, 50, 205, 100), (radius, radius), radius-5)
                 pygame.draw.circle(self.image, (50, 50, 155, 100), (radius, radius), radius-10)
@@ -744,7 +823,7 @@ if __name__ == '__main__':
                 self.parent.built_upgrade_tower(None, False, True, False, 'enemy killed')
 
         def update(self):
-            if self.type == 'hidden':
+            if self.typo == 'hidden':
                 if pygame.sprite.collide_rect(self, self.parent.mouse):
                     all_sprites.add(self.hp_bar)
                 else:
@@ -853,7 +932,7 @@ if __name__ == '__main__':
                                       (enemy.rect.center[1] - enemy.radius - self.center[1]) ** 2)
                     if valrt < self.attack_radius or valrb < self.attack_radius or vallb < self.attack_radius or \
                             vallt < self.attack_radius:
-                        if not (enemy.type == 'hidden' and self.level < 3):
+                        if not (enemy.typo == 'hidden' and self.level < 3):
                             if Tower.towers_aim[self.towers_aim_cursor] == 'first':
                                 enemy.damaged(self)
                                 break
@@ -932,8 +1011,13 @@ if __name__ == '__main__':
                 self.clicked_bool = True
             if self.parent.screen_focus == 'main menu' and click:
                 if self.rect.colliderect(parent.main_menu_play_button_rect):
-                    parent.screen_focus = 'game'
-                    self.parent.map = Map()
+                    parent.screen_focus = 'choose level'
+                    #self.parent.map = Map()
+            elif self.parent.screen_focus == 'choose level' and click:
+                for i, rect in enumerate(parent.choose_level_button_rects):
+                    if self.rect.colliderect(rect):
+                        self.parent.map = Map(i + 1)
+                        self.parent.screen_focus = 'game'
             elif self.parent.screen_focus == 'game':
                 if len(list_of_possobility_to_go) * value > self.click_pos[1]:
                     if click and self.pos in Tower.towers_pos and \
@@ -1071,6 +1155,7 @@ if __name__ == '__main__':
             self.parent = parent
             self.radius = 400
             self.num_lines = 200
+            self.way = 'down'
             self.translate = width // 2, height // 2
             self.screen = pygame.Surface((width, height)).convert_alpha()
             self.screen.fill((0, 0, 0, 0))
@@ -1079,7 +1164,14 @@ if __name__ == '__main__':
             self.screen.fill((0, 0, 0, 0))
             time = pygame.time.get_ticks()
             self.radius = 360 + 100 * abs(math.sin(time * 0.001))
-            factor = abs(50 - time * 0.0001)
+            if self.way == 'down':
+                factor = abs(50 - (time * 0.0001) % 50)
+                if factor <= 0:
+                    self.way = 'up'
+            if self.way == 'up':
+                factor = abs(0 + (time * 0.0001) % 50)
+                if factor >= 50:
+                    self.way = 'up'
             color = get_color()
             for i in range(self.num_lines):
                 theta = (2 * math.pi / self.num_lines) * i
