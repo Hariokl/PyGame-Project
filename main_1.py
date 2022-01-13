@@ -2,13 +2,13 @@ import math
 import pygame
 import random
 import numpy as np
-#import pathlib
-######### yes, im really bad at english, so what? Just take it, please (;-;)
-##  1.Guide for those, who doesn't know this:
-##      """color = 'red' if number1 > number 2 else 'black'"""
-##      Here, color is 'red' when number1 more than number 2, else color is 'black'.
-##      It's quite useful thing, so I hope that this will help you in future.
-##      I want to let you know, so you can understand what my code is doing, and what I wanted to do. ;)
+#   import pathlib
+#   yes, im really bad at english, so what? Just take it, please (;-;)
+#   1.Guide for those, who doesn't know this:
+#      """color = 'red' if number1 > number 2 else 'black'"""
+#      Here, color is 'red' when number1 more than number 2, else color is 'black'.
+#      It's quite useful thing, so I hope that this will help you in future.
+#      I want to let you know, so you can understand what my code is doing, and what I wanted to do. ;)
 FPS = 60
 if __name__ == '__main__':
     pygame.init()
@@ -33,7 +33,7 @@ if __name__ == '__main__':
     def update_fps():
         font = pygame.font.SysFont("Arial", 18)
         fps = str(int(clock.get_fps()))
-        fps_text = font.render(fps, 1, pygame.Color("coral"))
+        fps_text = font.render(fps, True, pygame.Color("coral"))
         return fps_text
 
     def get_color():
@@ -64,13 +64,13 @@ if __name__ == '__main__':
             self.screen_for_many_feautures.fill((0, 0, 0, 0))
             self.next_wave_button_rect = pygame.Rect(width // 30, height - height // 20 - height // 8, width // 12,
                                                      height // 8)
-            #####   main menu
+            #   main menu
             self.screen_for_main_menu = pygame.Surface((width, height)).convert_alpha()
             self.screen_for_main_menu.fill((0, 0, 0, 0))
             self.cardioid = Cardioid(self)
             self.main_menu_play_button_rect = pygame.Rect((width // 3, height // 5 * 3), (width // 3, height // 6))
             self.draw_main_menu()
-            #####   choose level
+            #   choose level
             self.screen_for_choose_level = pygame.Surface((width, height)).convert_alpha()
             self.screen_for_choose_level.fill((0, 0, 0, 0))
             rect1 = pygame.Rect(width // 16 * 3, height // 3, width // 8, height // 16 * 3)
@@ -83,7 +83,7 @@ if __name__ == '__main__':
             self.level_info_start_button_rect = None
             self.level_info_close_button_rect = pygame.Rect(width // 15 * 11, height // 20 * 3,
                                                             width // 15, height // 10)
-            #####   settings
+            #   settings
             self.in_game_settings_open_button_rect = pygame.Rect(width // 60, height // 40, width // 12, height // 8)
             self.in_game_settings_screen = pygame.Surface((width, height)).convert_alpha()
             self.in_game_settings_screen.fill((0, 0, 0, 100))
@@ -92,7 +92,7 @@ if __name__ == '__main__':
             self.in_game_settings_auto_next_wave_button_rect = pygame.Rect(width * 2 // 3 - 85, height // 10 * 3 + 45,
                                                                            width // 30, height // 20)  ### (width // 3 + 5, height // 10 * 3 + 10)
             self.auto_next_wave = False
-            ##### built/delete tower
+            # built/delete tower
             self.built_tower_type_left_rect = pygame.Rect(width // 3 * 2 + width // 40, height // 5, 60, 90)
             self.built_tower_type_right_rect = pygame.Rect(width - width // 40 - 60, height // 5, 60, 90)
             self.delete_tower_rect = pygame.Rect(width // 3 * 2 + width // 4, height // 2, width // 20, height // 40 * 3)
@@ -105,14 +105,14 @@ if __name__ == '__main__':
                                                      width // 6 - 20, height // 10 - 20)
             self.priority_for_tower_button_rect = pygame.Rect(width // 15 * 11, height // 60 * 23, width // 5,
                                                               height // 10)
-            #####
+            #
             self.bool_to_go_to_next_wave = False
-            #### particles
+            # particles
             self.particles_main_menu = []
             self.particles_choose_level = [[], [], []]
-            ####    saving info
+            #    saving info
             self.levels_progress = [0, 0, 0]
-            ####
+            #
             self.towers = []
             self.mouse = Mouse(self)
             self.clock = pygame.time.Clock()
@@ -174,7 +174,7 @@ if __name__ == '__main__':
             screen.blit(self.screen_for_main_menu, (0, 0))
 
         def draw_main_menu(self):
-            ### making 'Play' button
+            # making 'Play' button
             pygame.draw.rect(self.screen_for_main_menu, (20, 150, 20),
                              ((width // 3, height // 5 * 3), (width // 3, height // 6)), 0)
             pygame.draw.rect(self.screen_for_main_menu, (20, 200, 20),
@@ -214,7 +214,7 @@ if __name__ == '__main__':
         def draw_choose_level(self):
             self.screen_for_choose_level.fill((0, 0, 0, 0))
             w, h = width, height
-            ### draw buttons
+            # draw buttons
             for i in range(3):
                 bpos1 = (w // 8 + w // 16 + w // 8 * 2 * i, h // 3), (w // 8, h // 16 * 3)
                 bpos2 = ((w * 3 + w * 4 * i) // 16 + 5, h // 3 + 5), (w // 8 - 10, h // 16 * 3 - 10)
@@ -232,7 +232,7 @@ if __name__ == '__main__':
                     pygame.draw.polygon(screen_for_star, (200, 200, 0), pos, 0)
                     pos = (bpos1[0][0] + 15 + 40 * j, bpos1[0][1] + bpos2[1][1] - 35)
                     self.screen_for_choose_level.blit(screen_for_star, pos)
-            ### draw
+            # draw
             for i in range(5):
                 text = pygame.font.Font(None, 120 - i).render('Choose Level', True, [i * 30 + 50 for _ in range(3)])
                 text_rect = text.get_rect()
@@ -243,19 +243,19 @@ if __name__ == '__main__':
             self.screen_for_choose_level.blit(self.screen_for_level_info, (0, 0))
 
         def draw_level_info(self, level_n):
-            #### making big rects
+            # making big rects
             r1_pos = (width // 5, height // 20 * 3), (width // 5 * 3, height // 10 * 7)
             r2_pos = (width // 5 + 5, height // 20 * 3 + 5), (width // 5 * 3 - 10, height // 10 * 7 - 10)
             pygame.draw.rect(self.screen_for_level_info, (40, 40, 40), r1_pos, border_radius=20)
             pygame.draw.rect(self.screen_for_level_info, (60, 60, 60), r2_pos, border_radius=18)
-            #### making close button
+            # making close button
             cl_pos1 = (width // 15 * 11, height // 20 * 3), (width // 15, height // 10)
             cl_pos2 = (width // 15 * 11, height // 20 * 3), (width // 30, height // 20)
             cl_pos3 = (width // 15 * 11 + width // 30, height // 5), (width // 30, height // 20)
             pygame.draw.rect(self.screen_for_level_info, (250, 20, 20), cl_pos1, border_radius=20)
             pygame.draw.rect(self.screen_for_level_info, (250, 20, 20), cl_pos2, 0)
             pygame.draw.rect(self.screen_for_level_info, (250, 20, 20), cl_pos3, 0)
-            #### making 'Start' button
+            # making 'Start' button
             sb_text = pygame.font.Font(None, 120).render('START', True, (20, 100, 20))
             sb_text_rect = sb_text.get_rect()
             sb_text_rect.topleft = width // 2 - sb_text_rect.width // 2, height // 20 * 17 - sb_text_rect.height - 4
@@ -267,7 +267,7 @@ if __name__ == '__main__':
             s_b = (s_b_rect.left + 4, s_b_rect.top + 4), (s_b_rect.width - 8, s_b_rect.height - 8)
             pygame.draw.rect(self.screen_for_level_info, (20, 200, 20), s_b, border_radius=19)
             self.screen_for_level_info.blit(sb_text, sb_text_rect)
-            #### making level text
+            # making level text
             level_text = pygame.font.Font(None, 80).render(f'Level {level_n}', True, (130, 130, 130))
             level_text_rect = level_text.get_rect()
             level_text_rect.topleft = width // 2 - level_text_rect.width // 2, height // 20 * 3
@@ -277,7 +277,7 @@ if __name__ == '__main__':
             pos1 = pos[0], (pos[1][0], pos[1][1] // 2)
             pygame.draw.rect(self.screen_for_level_info, (40, 40, 40), pos1, 0)
             self.screen_for_level_info.blit(level_text, level_text_rect)
-            #### making tasks
+            # making tasks
             tasks_text = pygame.font.Font(None, 120).render('Tasks', True, (130, 130, 130))
             ttr = tasks_text_rect = tasks_text.get_rect()
             tasks_text_rect.topleft = width // 2 - tasks_text_rect.width // 2, height // 10 * 3 + 5
@@ -344,14 +344,14 @@ if __name__ == '__main__':
             screen.blit(lifes_text, (350, 10))
             screen.blit(coins_text, (500, 15))
             screen.blit(self.screen_for_many_feautures, (0, 0))
-            screen.blit(speed_text, (width*2//15+width//30-20, height//10*8+height//20-15))     ###
+            screen.blit(speed_text, (width*2//15+width//30-20, height//10*8+height//20-15))
 
         def sell_tower(self):
             screen.blit(self.screen_for_sell_tower, (0, 0))
 
         def draw_sell_tower(self):
             tower = self.towers[Tower.towers_pos.index(self.mouse.pos)]
-            #### drawing some rects
+            # drawing some rects
             pygame.draw.rect(self.screen_for_sell_tower, (240, 40, 40),
                              ((width // 3 - 5, height // 3 - 5), (width // 3 + 10, height // 3 + 10)), 0)
             pygame.draw.rect(self.screen_for_sell_tower, (40, 40, 40),
@@ -360,7 +360,7 @@ if __name__ == '__main__':
                              ((width // 3 + 3, height // 3 + 3), (width // 3 - 6, height // 13 - 6)), 0)
             pygame.draw.rect(self.screen_for_sell_tower, (60, 60, 60),
                              ((width // 3, height * 2 // 3 - height // 10), (width // 3, height // 10)), 0)
-            #### drawing close button
+            # drawing close button
             pygame.draw.rect(self.screen_for_sell_tower, (250, 60, 60),
                              ((width // 3 * 2 - 55, height // 3 + 5), (50, 50)), 0)
             pygame.draw.rect(self.screen_for_sell_tower, (250, 20, 20),
@@ -371,21 +371,21 @@ if __name__ == '__main__':
             pos_of_line1 = (width // 3 * 2 - 15, height // 3 + 15), (width // 3 * 2 - 22, height // 3 + 15), \
                            (width // 3 * 2 - 45, height // 3 + 45), (width // 3 * 2 - 38, height // 3 + 45)
             pygame.draw.polygon(self.screen_for_sell_tower, (250, 250, 250), pos_of_line1, 0)
-            #### draw 'NO' button
+            # draw 'NO' button
             pygame.draw.rect(self.screen_for_sell_tower, (250, 20, 20),
                              ((width // 3 + 10, height * 2 // 3 - height // 10 + 10),
                               (width // 6 - 20, height // 10 - 20)), 0)
             pygame.draw.rect(self.screen_for_sell_tower, (250, 60, 60),
                              ((width // 3 + 15, height * 2 // 3 - height // 10 + 15),
                               (width // 6 - 30, height // 10 - 30)), 0)
-            #### draw 'YES' button
+            # draw 'YES' button
             pygame.draw.rect(self.screen_for_sell_tower, (0, 150, 0),
                              ((width // 6 + width // 3 + 10, height * 2 // 3 - height // 10 + 10),
                               (width // 6 - 20, height // 10 - 20)), 0)
             pygame.draw.rect(self.screen_for_sell_tower, (60, 250, 60),
                              ((width // 6 + width // 3 + 15, height * 2 // 3 - height // 10 + 15),
                               (width // 6 - 30, height // 10 - 30)), 0)
-            #### text
+            # text
             head_text = self.font50.render('Sell tower', True, (250, 40, 40))
             head_text_rect = head_text.get_rect()
             head_text_rect.x = width // 2 - 30 - head_text_rect.width // 2
@@ -423,21 +423,21 @@ if __name__ == '__main__':
 
         def draw_settings_in_game(self, bool=True):
             if bool:
-                #### just big rect. no, really, it's quite big :0
+                # just big rect. no, really, it's quite big :0
                 pos_of_big_rect = (width // 3, height // 5), (width // 3, height * 3 // 5)
                 pygame.draw.rect(self.in_game_settings_screen, (40, 40, 40), pos_of_big_rect, 0)
-                #### here is gonna be name of this thing('Setings'), and close button
+                # here is gonna be name of this thing('Setings'), and close button
                 pos_of_name_rect = (width // 3 + 5, height // 5 + 5), (width // 3 - 10, height // 10)
                 pygame.draw.rect(self.in_game_settings_screen, (60, 60, 60), pos_of_name_rect, 0)
-                #### place where all settings gonna be, also quit button :0
+                # place where all settings gonna be, also quit button :0
                 pos_of_rect = (width // 3 + 5, height // 10 * 3 + 10), (width // 3 - 10, height // 2 - 15)
                 pygame.draw.rect(self.in_game_settings_screen, (70, 70, 70), pos_of_rect, 0)
-                #### text 'settings' :)
+                # text 'settings' :)
                 text = pygame.font.Font(None, 70).render('Settings', True, (0, 0, 0))
                 text_rect = text.get_rect()
                 text_rect.x, text_rect.top = width // 2 - text_rect.width * 2 // 3, height // 5 + 25
                 self.in_game_settings_screen.blit(text, text_rect)
-                #### close button
+                # close button
                 close_button = self.in_game_settings_close_button_rect
                 pygame.draw.rect(self.in_game_settings_screen, (200, 0, 0), close_button, 0)
                 pos = (close_button.left + 5, close_button.top + 5), (close_button.width - 10, close_button.height - 10)
@@ -448,14 +448,14 @@ if __name__ == '__main__':
                 pygame.draw.polygon(self.in_game_settings_screen, (255, 255, 255), pos1, 0)
                 pos2 = (r - 10, t + 15), (r - 25, t + 15), (l + 10, b - 15), (l + 25, b - 15)
                 pygame.draw.polygon(self.in_game_settings_screen, (255, 255, 255), pos2, 0)
-                #### 'auto next wave' button
+                # 'auto next wave' button
                 auto_next_wave_rect = self.in_game_settings_auto_next_wave_button_rect
                 pygame.draw.rect(self.in_game_settings_screen, (50, 50, 50), auto_next_wave_rect, 0)
                 rect = self.in_game_settings_auto_next_wave_button_rect
                 pos = (rect.left + 5, rect.top + 5), (rect.width - 10, rect.height - 10)
                 color = (0, 255, 0) if self.auto_next_wave else (255, 0, 0)
                 pygame.draw.rect(self.in_game_settings_screen, color, pos, 0)
-                #### 'auto next wave' text
+                # 'auto next wave' text
                 text = pygame.font.Font(None, 50).render('Auto-next wave', True, (0, 0, 0))
                 text_rect = text.get_rect()
                 text_rect.x, text_rect.top = width // 3 + text_rect.width // 10, height // 10 * 3 + 45
@@ -468,31 +468,31 @@ if __name__ == '__main__':
 
         def once_draw_some_things(self):
             wave_text = self.font50.render(str(self.wave), True, (20, 20, 250))
-            ####  making coins
+            #  making coins
             screen_for_coin = pygame.Surface((50, 50)).convert_alpha()
             screen_for_coin.fill((0, 0, 0, 0))
             pos_for_coin = 25, 25
             pygame.draw.circle(screen_for_coin, (200, 200, 0), pos_for_coin, 20)
             pygame.draw.circle(screen_for_coin, (200, 150, 0), pos_for_coin, 15)
-            ####  making heart :)
+            #  making heart :)
             screen_for_heart = pygame.Surface((50, 50)).convert_alpha()
             screen_for_heart.fill((0, 0, 0, 0))
             pos_for_life = (25, 10), (35, 0), (45, 10), (40, 25), (25, 38), (10, 25), (5, 10), (15, 0)
             pygame.draw.polygon(screen_for_heart, (200, 0, 0), pos_for_life, 0)
-            ####  making wave
+            #  making wave
             screen_for_wave = pygame.Surface((50, 50)).convert_alpha()
             screen_for_wave.fill((0, 0, 0, 0))
             pos_for_wave1 = (5, 10), (20, 5), (35, 10), (45, 5), (35, 20), (20, 15), (5, 20)
             pos_for_wave2 = (5, 30), (20, 25), (35, 30), (45, 25), (35, 40), (20, 35), (5, 40)
             pygame.draw.polygon(screen_for_wave, (20, 20, 250), pos_for_wave1, 0)
             pygame.draw.polygon(screen_for_wave, (20, 20, 220), pos_for_wave2, 0)
-            #### making 'speed up' button
+            # making 'speed up' button
             pygame.draw.rect(self.screen_for_many_feautures, (100, 100, 100), self.speed_up_button_rect,
                              border_radius=20)
-            pos_of_circle = (width//6, height//20*17)   ### width*2//15, height//10*8, width//15, height//10
+            pos_of_circle = (width//6, height//20*17)
             pygame.draw.circle(self.screen_for_many_feautures, (40, 40, 40), pos_of_circle, 35)
             pygame.draw.circle(self.screen_for_many_feautures, (80, 80, 80), pos_of_circle, 30)
-            #### making 'next wave' button
+            # making 'next wave' button
             rect = self.next_wave_button_rect
             pygame.draw.rect(self.screen_for_many_feautures, (40, 40, 40), rect, border_radius=30)
             pos_for_mini_rect = (rect.left + 5, rect.top + 5), (rect.width - 10, rect.height - 10)
@@ -500,7 +500,7 @@ if __name__ == '__main__':
             pos_for_triangle = (rect.left + 20, rect.top + 20), (rect.right - 20, rect.top + rect.width // 2), \
                                (rect.left + 20, rect.bottom - 20)
             pygame.draw.polygon(self.screen_for_many_feautures, (250, 250, 250), pos_for_triangle, 0)
-            #### making 'open "in game" settings' button
+            # making 'open "in game" settings' button
             settings_rect = self.in_game_settings_open_button_rect
             s_r_w = settings_rect.width
             s_r_h = settings_rect.height
@@ -513,12 +513,12 @@ if __name__ == '__main__':
             pygame.draw.rect(self.screen_for_many_feautures, (100, 100, 100), pos_of_rect1, 0)
             pygame.draw.rect(self.screen_for_many_feautures, (60, 60, 60), pos_of_rect2, 0)
             pygame.draw.rect(self.screen_for_many_feautures, (60, 60, 60), pos_of_rect3, 0)
-            #### making 'to close-open build-upgrade tower' button
+            # making 'to close-open build-upgrade tower' button
             pygame.draw.rect(self.screen_for_upgr_built, (80, 80, 80), ((0, 0), (width // 3, 80)), 0)
             pygame.draw.polygon(self.screen_for_upgr_built, (40, 40, 40),
                                 ((width // 12, height // 50), (width // 6, 80 - height // 50),
                                  (width // 3 - width // 12, height // 50)), 0)
-            #### blit everything
+            # blit everything
             self.screen_for_many_feautures.blit(screen_for_coin, (440, 5))
             self.screen_for_many_feautures.blit(screen_for_heart, (300, 10))
             self.screen_for_many_feautures.blit(screen_for_wave, (160, 10))
@@ -649,7 +649,7 @@ if __name__ == '__main__':
                                 attack_text = font40.render(
                                     f'Attack Damage: {tower.attack_dmg}(+{tower.beginning_attack_dmg})', True,
                                     (200, 40, 40))
-                            ### draw 'priority' button
+                            # draw 'priority' button
                             if Tower.towers_aim[tower.towers_aim_cursor] == 'first':
                                 color1 = (20, 20, 200)
                                 color2 = (10, 10, 250)
@@ -675,7 +675,7 @@ if __name__ == '__main__':
                             priority_text_rect.topleft = (width // 15 + width // 10 - priority_text_rect.width // 2,
                                                           height // 60 * 26 - priority_text_rect.height // 2)
                             self.screen_for_upgr_built.blit(priority_text, priority_text_rect)
-                            ### draw upgrade button
+                            # draw upgrade button
                             color = (240, 240, 0) if self.coins - tower.upgrade_cost >= 0 else (240, 0, 0)
                             upgrade_cost_text = font40.render(f'Upgrade Cost: {tower.upgrade_cost}', True, color)
                             up_cost_rect = upgrade_cost_text.get_rect()
@@ -691,7 +691,7 @@ if __name__ == '__main__':
                             pos_of_button_to_bui_upg = (width // 30 + 5, height // 2 + 5), \
                                                        (width // 45 * 8 - 10, height // 9 - 10)
                             pygame.draw.rect(self.screen_for_upgr_built, (80, 80, 80), pos_of_button_to_bui_upg, 0)
-                            ### draw delete button
+                            # draw delete button
                             pygame.draw.rect(self.screen_for_upgr_built, (250, 80, 80),
                                              ((width // 4, height // 2), (width // 20, height // 40 * 3)), 0)
                             pygame.draw.rect(self.screen_for_upgr_built, (250, 40, 40),
@@ -702,7 +702,7 @@ if __name__ == '__main__':
                             dollar_text_rect.x = width // 4 + width // 40 - dollar_text_rect.width // 2
                             dollar_text_rect.y = height // 2 + height // 80 * 3 - dollar_text_rect.height // 2
                             self.screen_for_upgr_built.blit(dollar_text, dollar_text_rect)
-                            ###
+                            #
                             for i, x in enumerate([radius_text, attack_text, speed_text]):
                                 rectx = x.get_rect()
                                 rectx.top, rectx.x = 160 + i * 40, width // 6 - rectx.width // 2
@@ -727,7 +727,7 @@ if __name__ == '__main__':
                     pygame.draw.rect(self.screen_for_upgr_built, (40, 40, 40), ((0, 0), (width // 3, 80)), 0)
                     pygame.draw.rect(self.screen_for_upgr_built, (70, 70, 70), ((5, 5), (width // 3-10, 70)), 0)
                     pygame.draw.polygon(self.screen_for_upgr_built, (40, 40, 40), posses, 0)
-                #self.screen_for_upgr_built.blit(text_for_button, rect)
+                # self.screen_for_upgr_built.blit(text_for_button, rect)
             if screen_ is not None:
                 if not self.mouse.here_tower:
                     pos_ = (self.mouse.pos[0]*value + 2, self.mouse.pos[1]*value + 2), (value - 4, value - 4)
@@ -987,7 +987,7 @@ if __name__ == '__main__':
             self.time = self.attack_speed
             self.parent = parent
             self.level = 1
-            #pygame.draw.circle(self.parent.screen_for_draw, (0, 0, 200, 50), self.center, self.attack_radius)
+            # pygame.draw.circle(self.parent.screen_for_draw, (0, 0, 200, 50), self.center, self.attack_radius)
             Tower.towers_pos.append((self.x, self.y))
             towers_sprites.add(self)
             all_sprites.add(self)
@@ -1061,14 +1061,14 @@ if __name__ == '__main__':
             pygame.mouse.set_visible(False)
             self.parent = parent
             self.image = pygame.Surface((10, 10), pygame.SRCALPHA, 32)
-            #pygame.draw.circle(self.image, (50, 250, 0), (5, 5), 5)
+            # pygame.draw.circle(self.image, (50, 250, 0), (5, 5), 5)
             [pygame.draw.circle(self.image, (0, 170 + i * 20, 0, i * 30 + 130), (5, 5), 5 - i) for i in range(5)]
             self.rect = pygame.Rect(0, 0, 10, 10)
             self.mask = pygame.mask.from_surface(self.image)
-            #all_sprites.add(self)
+            # all_sprites.add(self)
             mouse_sprites.add(self)
             self.clicked_bool = False
-            #self.clicked_bool_for_built_or_upg = (False, False)
+            # self.clicked_bool_for_built_or_upg = (False, False)
             # self.screen_for_detected_tower = pygame.Surface((width, height)).convert_alpha()
             # self.screen_for_detected_tower.fill((0, 0, 0, 0))
             self.pos = (0, 0)
@@ -1091,7 +1091,7 @@ if __name__ == '__main__':
             if self.parent.screen_focus == 'main menu' and click:
                 if self.rect.colliderect(parent.main_menu_play_button_rect):
                     parent.screen_focus = 'choose level'
-                    #self.parent.map = Map()
+                    # self.parent.map = Map()
             elif self.parent.screen_focus == 'choose level' and click:
                 for i, rect in enumerate(parent.choose_level_button_rects):
                     if self.rect.colliderect(rect):
@@ -1114,7 +1114,7 @@ if __name__ == '__main__':
                     elif click and list_of_possobility_to_go[self.pos[1]][self.pos[0]] == 2  and \
                             width * 7 // 10 <= self.click_pos[0] <= width * 29 // 30 and \
                                 height * 11 // 18 >= self.click_pos[1] >= height // 2 and self.not_none_field and \
-                                    self.pos not in Tower.towers_pos and parent.clicked_bui_upg_but:  ### (width // 3 * 2 + width // 30, height // 2), (width // 15 * 4 + width // 3 * 2 + width // 30, height // 9)
+                                    self.pos not in Tower.towers_pos and parent.clicked_bui_upg_but:
                         parent.built_upgrade_tower(self.screen_for_Game, True, click, False, 'build')
                     elif width * 2 // 3 <= self.click_pos[0] <= width and self.click_pos[1] <= 80 and \
                             self.not_none_field:
