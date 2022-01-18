@@ -4,6 +4,7 @@ import json
 import pygame
 import random
 import numpy as np
+
 # import pathlib
 #   yes, im really bad at english, so what? Just take it, please (;-;)
 #   1.Guide for those, who doesn't know this:
@@ -32,12 +33,6 @@ if __name__ == '__main__':
     clock = pygame.time.Clock()
     r, g, b, pr = 0, 0, 0, 'r'
 
-    def update_fps():
-        font = pygame.font.SysFont("Arial", 18)
-        fps = str(int(clock.get_fps()))
-        fps_text = font.render(fps, 1, pygame.Color("coral"))
-        return fps_text
-
     def get_color():
         global pr, r, g, b
         if pr == 'r':
@@ -57,9 +52,9 @@ if __name__ == '__main__':
 
     class Game:
         def __init__(self):
-            self.screen_for_draw = pygame.Surface((width, height)).convert_alpha()    # idk how to name it, so let it go
+            self.screen_for_draw = pygame.Surface((width, height)).convert_alpha()
             self.screen_for_draw.fill((0, 0, 0, 0))
-            self.screen_for_upgr_built = pygame.Surface((width//3, height*2//3)).convert_alpha()  # idk how to name it either, so let it go, please
+            self.screen_for_upgr_built = pygame.Surface((width//3, height*2//3)).convert_alpha()
             self.screen_for_upgr_built.fill((0, 0, 0, 0))
             self.speed_up_button_rect = pygame.Rect(width*2//15, height//10*8, width//15, height//10)
             self.screen_for_many_feautures = pygame.Surface((width, height)).convert_alpha()
@@ -72,7 +67,6 @@ if __name__ == '__main__':
                     data = json.load(file)
                     self.levels_progress = [x - 10 + i * 2 for i, x in enumerate(data["levels_progress"])]
                     self.opened_towers = 10 - data["number_of_towers"] // 211
-                    print(self.levels_progress, self.opened_towers)
             except FileNotFoundError:
                 self.levels_progress = [0, 0, 0]
                 self.opened_towers = 2
@@ -136,7 +130,7 @@ if __name__ == '__main__':
             # particles
             self.particles_main_menu = []
             self.particles_choose_level = [[], [], []]
-            #
+            # some useful staff
             self.bool_to_go_to_next_wave = False
             self.towers = []
             self.mouse = Mouse(self)
@@ -154,7 +148,6 @@ if __name__ == '__main__':
             self.enemy_hp = 5
             self.coins = 200
             self.clicked_bui_upg_but = False
-            print('ddddddddddddddddddd')
             self.font = pygame.font.Font(None, 40)
             self.font50 = pygame.font.Font(None, 50)
             self.build_upgr_timer = pygame.time.Clock()
@@ -255,7 +248,6 @@ if __name__ == '__main__':
                 col = (10 + i // 4, 10 + i // 4, 10 + i // 4)
                 br = 40 - i // 5
                 pygame.draw.rect(self.screen_for_choose_level, col, pos, border_radius=br)
-            print()
             w, h = width, height
             # draw level buttons
             for i in range(3):
@@ -441,7 +433,6 @@ if __name__ == '__main__':
                 self.bool_to_go_to_next_wave = False
                 self.max_number_of_enemies += 1
                 self.number_of_enemies = self.max_number_of_enemies
-                print(self.wave)
                 if self.retry_bool:
                     self.wave = 1
                     self.retry_bool = False
@@ -723,7 +714,6 @@ if __name__ == '__main__':
                     if bool_to_open_close and reason is None:
                         self.clicked_bui_upg_but = not self.clicked_bui_upg_but
                     if self.clicked_bui_upg_but:
-                        print('updated')
                         self.screen_for_upgr_built.fill((40, 40, 40))
                         for i in range(10):
                             pos_of_rect = (3 + i, 83 + i), (width // 3 - 6 - i * 2, height * 2 // 3 - 86 - i * 2)
@@ -891,16 +881,13 @@ if __name__ == '__main__':
                         self.screen_for_upgr_built.blit(text_for_button, rect_b_u)
                         posses = (width // 12, 80 - height // 50), (width // 6, height // 50), \
                                  (width // 3 - width // 12, 80 - height // 50)
-                        print('MANY')
                     else:
                         self.screen_for_upgr_built.fill((0, 0, 0, 0))
                         posses = (width//12, height//50), (width//6, 80-height//50), (width//3-width//12, height//50)
-                        print('NOt')
                     for i in range(10):
                         pos_ = ((i, i), (width // 3 - i * 2, 80 - i * 2))
                         pygame.draw.rect(self.screen_for_upgr_built, (40 + i * 3, 40 + i * 3, 40 + i * 3), pos_, 0)
                     pygame.draw.polygon(self.screen_for_upgr_built, (40, 40, 40), posses, 0)
-                # self.screen_for_upgr_built.blit(text_for_button, rect)
             if screen_ is not None:
                 if not self.mouse.here_tower:
                     pos_ = (self.mouse.pos[0]*value + 2, self.mouse.pos[1]*value + 2), (value - 4, value - 4)
@@ -958,8 +945,6 @@ if __name__ == '__main__':
                             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
                         }
             list_of_possobility_to_go = self.map[mapn]
-            print(self.map[1])
-            print(list_of_possobility_to_go)
             for y in range(len(list_of_possobility_to_go)):
                 for x in range(len(list_of_possobility_to_go[y])):
                     if list_of_possobility_to_go[y][x] == 3:
@@ -1028,8 +1013,6 @@ if __name__ == '__main__':
                         pygame.draw.circle(self.image, (21, 21, 150), pos_of_circle, 10)
             self.rect = pygame.Rect(0, 0, value*len(self.list_of_values_to_draw[0]),
                                     value*len(self.list_of_values_to_draw))
-            print(self.list_of_values_to_draw)
-            print('Усё')
 
 
     class Enemy(pygame.sprite.Sprite):
@@ -1223,12 +1206,10 @@ if __name__ == '__main__':
             self.towers_aim_cursor = 0
             self.attack_dmg = self.beginning_attack_dmg
             self.center = self.rect.center
-            print(self.center)
             self.clock = pygame.time.Clock()
             self.time = self.attack_speed
             self.parent = parent
             self.level = 1
-            # pygame.draw.circle(self.parent.screen_for_draw, (0, 0, 200, 50), self.center, self.attack_radius)
             Tower.towers_pos.append((self.x, self.y))
             towers_sprites.add(self)
             all_sprites.add(self)
@@ -1367,13 +1348,13 @@ if __name__ == '__main__':
                 if len(list_of_possobility_to_go) * value > self.click_pos[1]:
                     if click and self.pos in Tower.towers_pos and \
                             width // 3 * 2 + width // 30 <= self.click_pos[0] <= width // 3 * 2 + width // 90 * 19 and \
-                                height // 2 <= self.click_pos[1] <= height // 18 * 11 and parent.clicked_bui_upg_but:
+                            height // 2 <= self.click_pos[1] <= height // 18 * 11 and parent.clicked_bui_upg_but:
                         if self.parent.towers[Tower.towers_pos.index(self.pos)].level < self.parent.max_towers_level:
                             parent.built_upgrade_tower(self.screen_for_Game, True, click, False, 'upgrade')
                     elif click and list_of_possobility_to_go[self.pos[1]][self.pos[0]] == 2  and \
                             width * 7 // 10 <= self.click_pos[0] <= width * 29 // 30 and \
-                                height * 11 // 18 >= self.click_pos[1] >= height // 2 and self.not_none_field and \
-                                    self.pos not in Tower.towers_pos and parent.clicked_bui_upg_but:
+                            height * 11 // 18 >= self.click_pos[1] >= height // 2 and self.not_none_field and \
+                            self.pos not in Tower.towers_pos and parent.clicked_bui_upg_but:
                         parent.built_upgrade_tower(self.screen_for_Game, True, click, False, 'build')
                     elif width * 2 // 3 <= self.click_pos[0] <= width and self.click_pos[1] <= 80 and \
                             self.not_none_field:
@@ -1581,8 +1562,6 @@ if __name__ == '__main__':
 
 
     game = Game()
-    for item in list_of_possobility_to_go:
-        print(item)
     while running:
         screen.fill((10, 10, 10))
         for event in pygame.event.get():
@@ -1607,7 +1586,6 @@ if __name__ == '__main__':
         circle_sprites.update()
         mouse_sprites.draw(screen)
         mouse_sprites.update()
-        screen.blit(update_fps(), (10, 0))
         pygame.display.flip()
         clock.tick(FPS)
     with open('s4r6uiueuiodti.json', mode='w') as file:
